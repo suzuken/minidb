@@ -1,7 +1,7 @@
 // mini database implementation
 package minidb
 
-type MiniDB struct {
+type DB struct {
 }
 
 // REPL of minidb
@@ -11,6 +11,20 @@ type Console struct {
 
 // persistent session of minidb
 type Session struct {
+}
+
+// following database/sql
+type Client interface {
+	Close() error
+	Exec(query string, args ...interface{}) (Result, error)
+	Prepare(query string) (*Stmt, error)
+	Query(query string, args ...interface{}) (*Rows, error)
+}
+
+type Stmt struct {
+}
+
+type Rows struct {
 }
 
 // managing connection with minidb
@@ -33,20 +47,20 @@ type Record struct {
 
 // table
 type Table struct {
-    TableInfo TableInfo
+	TableInfo TableInfo
 }
 
 // meta data of table
 type TableInfo struct {
-    FieldInfo []FieldInfo
+	FieldInfo []FieldInfo
 }
 
 type FieldInfo struct {
-    name string
-    // int, float, etc. it supports all data types in golang
-    // TODO cast to datatype string to golang datatype itself
-    // only support boolean, string, numeric
-    DataType string
+	name string
+	// int, float, etc. it supports all data types in golang
+	// TODO cast to datatype string to golang datatype itself
+	// only support boolean, string, numeric
+	DataType string
 }
 
 // for saving
@@ -56,30 +70,38 @@ type File struct {
 }
 
 // create new client
-func NewClient() (*Client, error){
-    return nil, nil
+func NewClient() (*Client, error) {
+	return nil, nil
 }
 
 // just send query or definition for minidb
-func (c *Client) Send(q string) error {
-    return nil
+func (c *Client) Exec(q string) (Result, error) {
+    // TODO parsing query, and transfer responsibility to each function
+	return Result{}, nil
 }
 
-// saving file
-func (c *Client) CreateFile() error {
-    return nil
-}
-
-// delete db file itself
-func (c *Client) DeleteFile() error {
-    return nil
+// just send query or definition for minidb
+func (c *Client) Query(q string) (*Rows, error) {
+    // TODO parsing query, and transfer responsibility to each function
+	return &Rows{}, nil
 }
 
 // create table and write schema into file
 func (c *Client) CreateTable(name string, tableinfo TableInfo) (Table, error) {
-    return Table{}, nil
+	return Table{}, nil
 }
 
 func (c *Client) DeleteTable() error {
-    return nil
+	return nil
 }
+
+// saving file
+func (d *DB) CreateFile() error {
+	return nil
+}
+
+// delete db file itself
+func (d *DB) DeleteFile() error {
+	return nil
+}
+
