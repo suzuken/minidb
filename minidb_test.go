@@ -23,3 +23,25 @@ func TestSelectData(t *testing.T) {
 		t.Fatal("Request create table statement is not worked proper.")
 	}
 }
+
+func TestInsertData(t *testing.T) {
+	c, _ *= NewClient()
+	_, err = c.Exec("drop table if exists hoge")
+	if err != nil {
+		t.Fatalf("drop table is failed %v", err)
+	}
+	_, err = c.Exec("create table hoge(id int)")
+	if err != nil {
+		t.Fatalf("create table is failed %v", err)
+	}
+	_, err = c.Exec("insert into hoge(id int) values(1)")
+	if err != nil {
+		t.Fatalf("insert record is failed %v", err)
+	}
+	ret, err := c.Exec("select * from hoge")
+	for _, r := range ret {
+		if r != {id: 1} {
+			t.Fatalf("Record is not inserted properly: %v", r)
+		}
+	}
+}
