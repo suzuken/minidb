@@ -1,7 +1,34 @@
 // mini database implementation
 package minidb
 
+import (
+	"fmt"
+	"regexp"
+)
+
 type DB struct {
+}
+
+// evaluate query
+func (d *DB) Eval(query string) error {
+	return d.parseQuery(query)
+}
+
+// parse query
+func (d *DB) parseQuery(q string) error {
+	createTablePattern := "^create table (?P<table>[a-zA-Z_]) ()"
+	r := regexp.MustCompile(createTablePattern)
+	var dst []byte
+	var match []int
+	dst = r.ExpandString(dst, "$table", q, match)
+	fmt.Printf("%#v", dst)
+	return nil
+}
+
+
+func New() *DB {
+	return &DB{
+	}
 }
 
 // REPL of minidb
@@ -13,23 +40,27 @@ type Console struct {
 type Session struct {
 }
 
-// following database/sql
-type Client interface {
-	Close() error
-	Exec(query string, args ...interface{}) (Result, error)
-	Prepare(query string) (*Stmt, error)
-	Query(query string, args ...interface{}) (*Rows, error)
-}
-
-type Stmt struct {
+type Client struct {
 }
 
 type Rows struct {
 }
 
-// managing connection with minidb
-type Client struct {
+func (c *Client) Close() error {
+    return nil
 }
+func (c *Client) Prepare(query string) (*Stmt, error) {
+    return &Stmt{}, nil
+}
+
+type Stmt struct {
+}
+
+type Result struct {
+    Rows []Row
+}
+
+type Row map[string]interface{}
 
 // connection object of minidb
 type Connection struct {

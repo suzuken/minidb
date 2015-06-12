@@ -25,8 +25,8 @@ func TestSelectData(t *testing.T) {
 }
 
 func TestInsertData(t *testing.T) {
-	c, _ *= NewClient()
-	_, err = c.Exec("drop table if exists hoge")
+	c, _ := NewClient()
+	_, err := c.Exec("drop table if exists hoge")
 	if err != nil {
 		t.Fatalf("drop table is failed %v", err)
 	}
@@ -38,10 +38,13 @@ func TestInsertData(t *testing.T) {
 	if err != nil {
 		t.Fatalf("insert record is failed %v", err)
 	}
-	ret, err := c.Exec("select * from hoge")
-	for _, r := range ret {
-		if r != {id: 1} {
-			t.Fatalf("Record is not inserted properly: %v", r)
-		}
+	ret, err := c.Query("select * from hoge")
+	rows := Rows{
+		Row: {
+			"id": 1,
+		},
+	}
+	if ret != rows {
+		t.Fatalf("Record is not inserted properly: %v", r)
 	}
 }
